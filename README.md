@@ -1,3 +1,3 @@
 # RentACarSystem
 RentACarSystemDescription
-Team projet
+Team project
