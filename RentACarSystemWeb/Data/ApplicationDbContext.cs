@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
+
 namespace RentACarSystemWeb.Data
 {
     public class ApplicationDbContext : IdentityDbContext<User>
@@ -24,5 +25,7 @@ namespace RentACarSystemWeb.Data
             .HasIndex(u => u.EGN)
             .IsUnique();
         }
+
+        public DbSet<RentACarSystemWeb.ViewModels.Cars.CarsViewModel> GetCarsViewModel { get; set; }
     }
 }
