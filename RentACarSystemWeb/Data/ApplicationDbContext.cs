@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using RentACarSystemWeb.ViewModels.Cars;
+using RentACarSystemWeb.ViewModels.Queries;
 
 
 namespace RentACarSystemWeb.Data
@@ -36,5 +37,7 @@ namespace RentACarSystemWeb.Data
         public DbSet<RentACarSystemWeb.ViewModels.Cars.EditViewModel> EditViewModel { get; set; }
 
         public DbSet<RentACarSystemWeb.ViewModels.Cars.DeleteViewModel> DeleteViewModel { get; set; }
+
+        public DbSet<RentACarSystemWeb.ViewModels.Queries.QueryIndexViewModel> QueryIndexViewModel { get; set; }
     }
 }
