@@ -61,6 +61,23 @@ namespace RentACarSystemWeb.Areas.Identity.Pages.Account
             [Display(Name = "Confirm password")]
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
             public string ConfirmPassword { get; set; }
+
+            [Required]
+            [Display(Name = "FirstName")]
+            public string FirstName { get; set; }
+            [Required]
+            [Display(Name = "LastName")]
+            public string LastName { get; set; }
+            [Required]
+            [Display(Name = "EGN")]
+            [StringLength(10)]
+            public string EGN { get; set; }
+            [Required]
+            [Display(Name = "UserName")]
+            public string UserName { get; set; }
+            [Required]
+            [Display(Name = "Phone")]
+            public string Phone { get; set; }
         }
 
         public async Task OnGetAsync(string returnUrl = null)
@@ -75,7 +92,7 @@ namespace RentACarSystemWeb.Areas.Identity.Pages.Account
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (ModelState.IsValid)
             {
-                var user = new User { UserName = Input.Email, Email = Input.Email };
+                var user = new User { UserName = Input.UserName, Email = Input.Email, FirstName = Input.FirstName, LastName = Input.LastName, EGN = Input.EGN, PhoneNumber = Input.Phone };
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded)
                 {

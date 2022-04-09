@@ -43,13 +43,15 @@ namespace RentACarSystemWeb.Areas.Identity.Pages.Account
 
         public class InputModel
         {
-            [Required]
+            /*[Required]
             [EmailAddress]
-            public string Email { get; set; }
+            public string Email { get; set; }*/
 
             [Required]
             [DataType(DataType.Password)]
             public string Password { get; set; }
+            [Required]
+            public string UserName { get; set; }
 
             [Display(Name = "Remember me?")]
             public bool RememberMe { get; set; }
@@ -82,7 +84,7 @@ namespace RentACarSystemWeb.Areas.Identity.Pages.Account
             {
                 // This doesn't count login failures towards account lockout
                 // To enable password failures to trigger account lockout, set lockoutOnFailure: true
-                var result = await _signInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: false);
+                var result = await _signInManager.PasswordSignInAsync(Input.UserName, Input.Password, Input.RememberMe, lockoutOnFailure: false);
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User logged in.");
