@@ -4,6 +4,7 @@ using RentACarSystemWeb.Models;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using RentACarSystemWeb.ViewModels.Cars;
 
 
 namespace RentACarSystemWeb.Data
@@ -26,6 +27,14 @@ namespace RentACarSystemWeb.Data
             .IsUnique();
         }
 
-        public DbSet<RentACarSystemWeb.ViewModels.Cars.CarsViewModel> GetCarsViewModel { get; set; }
+        public DbSet<RentACarSystemWeb.ViewModels.Cars.IndexViewModel> GetCarsViewModel { get; set; }
+
+        public DbSet<RentACarSystemWeb.ViewModels.Cars.DetailsViewModel> DetailsViewModel { get; set; }
+
+        public DbSet<RentACarSystemWeb.ViewModels.Cars.CreateViewModel> CreateViewModel { get; set; }
+
+        public DbSet<RentACarSystemWeb.ViewModels.Cars.EditViewModel> EditViewModel { get; set; }
+
+        public DbSet<RentACarSystemWeb.ViewModels.Cars.DeleteViewModel> DeleteViewModel { get; set; }
     }
 }

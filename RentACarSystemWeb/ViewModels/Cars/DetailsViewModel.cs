@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace RentACarSystemWeb.ViewModels.Cars
 {
-    public class CarsViewModel
+    public class DetailsViewModel
     {
         [Key]
         public int Id { get; set; }
