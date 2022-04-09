@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RentACarSystemWeb.Data;
@@ -17,22 +18,25 @@ namespace RentACarSystemWeb.Controllers
         private DateTime startDate;
         private DateTime endDate;
         private readonly ApplicationDbContext _context;
-        public QueriesController(ApplicationDbContext context)
+        private readonly UserManager<User> _userManager;
+        public QueriesController(ApplicationDbContext context, UserManager<User> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
         // GET: QueriesController
         public async Task<ActionResult> Index()
         {
-            
+           
             List<QueryIndexViewModel> model = await _context.Queries
                   .Select(item => new QueryIndexViewModel
                   {
+
                       Id = item.Id,
-                      OwnerName=item.Owner.FirstName +" "+ item.Owner.LastName,
-                      CarName=item.Car.Brand+" "+item.Car.Model,
-                      StartDate=item.StartDate,
-                      EndDate=item.EndDate
+                      OwnerName = item.Owner.FirstName + " " + item.Owner.LastName,
+                      CarName = item.Car.Brand + " " + item.Car.Model,
+                      StartDate = item.StartDate,
+                      EndDate = item.EndDate
                   }).ToListAsync();
 
             return View(model);
@@ -44,7 +48,6 @@ namespace RentACarSystemWeb.Controllers
         {
             return View();
         }
-
 
         // GET: QueriesController/ChooseDate
         public ActionResult ChooseDate()
@@ -70,9 +73,9 @@ namespace RentACarSystemWeb.Controllers
         }
 
         // GET: QueriesController/Create
-        public async Task<ActionResult> Create()
+        public async Task<ActionResult> Create()//list
         {
-            List<Car> allCars = _context.Cars.ToList();
+            List<Car> allCars = await _context.Cars.ToListAsync();
             List<Car> availableCars = new List<Car>();
             foreach (var item in allCars)
             {
@@ -104,18 +107,18 @@ namespace RentACarSystemWeb.Controllers
                   }).ToList();
             return View(model);
         }
-
-        // POST: QueriesController/Create
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create([FromForm] IndexViewModel postModel)
+        
+        public async Task<ActionResult> Hire(int id)
         {
             Query query = new Query
             {
-               // Owner=HttpContext.User
+                Owner = await _userManager.GetUserAsync(User),
+                Car = _context.Cars.Find(id),
+                StartDate = startDate,
+                EndDate = endDate
             };
 
-            //await _context.Cars.AddAsync(car);
+            await _context.Queries.AddAsync(query);
             bool created = _context.SaveChanges() != 0;
             if (created)
             {
