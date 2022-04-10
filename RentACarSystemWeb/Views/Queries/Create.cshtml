@@ -1,4 +1,4 @@
-﻿@model IEnumerable<RentACarSystemWeb.ViewModels.Cars.IndexViewModel>
+﻿@model IEnumerable<RentACarSystemWeb.ViewModels.Queries.CarForQueryViewModel>
 
 @{
     ViewData["Title"] = "Create";
@@ -53,7 +53,7 @@
                 @Html.DisplayFor(modelItem => item.PricePerDay)
             </td>
             <td>
-                <a asp-action="Hire" asp-route-id="@item.Id">Hire</a>
+                <a asp-action="Hire" asp-route-id="@item.Id" asp-route-StartDate="@item.StartDate" asp-route-EndDate="@item.EndDate">Hire</a>
             </td>
         </tr>
 }

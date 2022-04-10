@@ -28,6 +28,12 @@ namespace RentACarSystemWeb.Data
             .IsUnique();
         }
 
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            base.OnConfiguring(optionsBuilder);
+            optionsBuilder.UseLazyLoadingProxies();
+        }
+
         public DbSet<RentACarSystemWeb.ViewModels.Cars.IndexViewModel> GetCarsViewModel { get; set; }
 
         public DbSet<RentACarSystemWeb.ViewModels.Cars.DetailsViewModel> DetailsViewModel { get; set; }

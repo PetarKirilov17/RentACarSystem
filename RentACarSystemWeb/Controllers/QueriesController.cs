@@ -15,8 +15,6 @@ namespace RentACarSystemWeb.Controllers
 {
     public class QueriesController : Controller
     {
-        private DateTime startDate;
-        private DateTime endDate;
         private readonly ApplicationDbContext _context;
         private readonly UserManager<User> _userManager;
         public QueriesController(ApplicationDbContext context, UserManager<User> userManager)
@@ -46,17 +44,41 @@ namespace RentACarSystemWeb.Controllers
         // GET: QueriesController/Details/5
         public ActionResult Details(int id)
         {
+            //Query query = _context.Queries.Find(id);
+
+            //if (query == null)
+            //{
+            //    return NotFound();
+            //}
+            //Car car = _context.Cars.Find(query.CarId);
+            //User user = _context.Users.Find(query.Owner);
+            //var model = new QueryDetailsViewModel()
+            //{
+            //    Id = query.Id,
+            //    StartDate = query.StartDate,
+            //    EndDate = query.EndDate,
+            //    Car = car.Brand + " " + car.Model,
+            //    Year = car.Year,
+            //    Seats = car.Seats,
+            //    Description = car.Description,
+            //    PricePerDay = car.PricePerDay,
+            //    UserName = user.UserName,
+            //    FullName = user.FirstName + " " + user.LastName,
+            //    Phone = user.PhoneNumber,
+            //    Email = user.Email
+            //};
+
             return View();
         }
 
         // GET: QueriesController/ChooseDate
         public ActionResult ChooseDate()
         {
-            return View();
+            return View(new ChooseDateViewModel());
         }
 
         // POST: QueriesController/ChooseDate
-        [HttpPost]
+       /* [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult ChooseDate([FromForm] ChooseDateViewModel model)
         {
@@ -70,10 +92,10 @@ namespace RentACarSystemWeb.Controllers
             {
                 return View();
             }
-        }
+        }*/
 
         // GET: QueriesController/Create
-        public async Task<ActionResult> Create()//list
+        public async Task<ActionResult> Create([FromQuery] ChooseDateViewModel dates)//list
         {
             List<Car> allCars = await _context.Cars.ToListAsync();
             List<Car> availableCars = new List<Car>();
@@ -87,15 +109,15 @@ namespace RentACarSystemWeb.Controllers
                 {
                     foreach (var query in item.CarQueries)
                     {
-                        if (((query.StartDate < startDate && query.EndDate < startDate) && (query.StartDate > endDate && query.EndDate > endDate)))
+                        if (((query.StartDate < dates.StartDate && query.EndDate < dates.StartDate) && (query.StartDate > dates.EndDate && query.EndDate > dates.EndDate)))
                         {
                             availableCars.Add(item);
                         }
                     }
                 }
             }
-            List<IndexViewModel> model = availableCars
-                  .Select(item => new IndexViewModel
+            List<CarForQueryViewModel> model = availableCars
+                  .Select(item => new CarForQueryViewModel
                   {
                       Id = item.Id,
                       Brand = item.Brand,
@@ -103,19 +125,21 @@ namespace RentACarSystemWeb.Controllers
                       Year = item.Year,
                       Seats = item.Seats,
                       Description = item.Description,
-                      PricePerDay = item.PricePerDay
+                      PricePerDay = item.PricePerDay,
+                      StartDate = dates.StartDate,
+                      EndDate = dates.EndDate
                   }).ToList();
             return View(model);
         }
         
-        public async Task<ActionResult> Hire(int id)
+        public async Task<ActionResult> Hire(int id, DateTime StartDate, DateTime EndDate)
         {
             Query query = new Query
             {
                 Owner = await _userManager.GetUserAsync(User),
                 Car = _context.Cars.Find(id),
-                StartDate = startDate,
-                EndDate = endDate
+                StartDate = StartDate,
+                EndDate = EndDate
             };
 
             await _context.Queries.AddAsync(query);
